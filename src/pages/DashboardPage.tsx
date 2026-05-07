@@ -1,8 +1,6 @@
-import { useWidgetQuery } from "./deprecated"
-import { WidgetCard } from "../../components/WidgetCard"
-import { gql } from "@apollo/client"
+import { WidgetCard } from "../components/WidgetCard"
 import { useQuery } from "@apollo/client/react"
-import { GET_WIDGETS } from "./GET_WIDGETS"
+import { GET_WIDGETS } from "../features/widgets/queries"
 
 type Widget = {
     id: string
