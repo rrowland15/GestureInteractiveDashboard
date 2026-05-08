@@ -1,49 +1,18 @@
-import { useMutation } from "@apollo/client/react"
+
 import { useState } from "react"
-
-import {
-    CREATE_WIDGET,
-} from "../features/widgets/mutations"
-
-import type {
-    CreateWidgetResponse,
-    CreateWidgetVariables,
-} from "../features/widgets/types"
+import { useCreateWidget } from "../features/widgets/hooks"
 
 export function WidgetForm() {
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
-
-    const [createWidget] = useMutation<
-        CreateWidgetResponse,
-        CreateWidgetVariables
-    >(CREATE_WIDGET)
-
+    const { createWidget } = useCreateWidget()
 
     return (
 
         <form
             onSubmit={async (e) => {
                 e.preventDefault()
-
-                await createWidget({
-                    variables: { title, description },
-                    update(cache, { data }) {
-                        if (!data) return
-
-                        cache.modify({
-                            fields: {
-                                widgets(existing = [], { toReference }) {
-                                    return [
-                                        ...existing,
-                                        toReference(data.createWidget),
-                                    ]
-                                },
-                            },
-                        })
-                    },
-                })
-
+                await createWidget(title, description)
                 setTitle("")
                 setDescription("")
             }}
