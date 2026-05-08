@@ -12,6 +12,8 @@ import type {
     DeleteWidgetVariables,
 } from "../features/widgets/types"
 
+import { useUpdateWidget } from "../features/widgets/hooks"
+
 type Props = {
     w: Widget
 }
@@ -20,6 +22,7 @@ export function WidgetRow({ w }: Props) {
 
     const [title, setTitle] = useState(w.title)
     const [description, setDescription] = useState(w.description ?? "")
+    const { saveWidget } = useUpdateWidget()
 
     const [deleteWidget] = useMutation<
         DeleteWidgetResponse,
@@ -48,36 +51,32 @@ export function WidgetRow({ w }: Props) {
     >(UPDATE_WIDGET)
 
 
-    /* ---------------- AUTOSAVE ---------------- */
-    const saveWidget = () => {
-        updateWidget({
-            variables: {
-                id: Number(w.id),
-                title,
-                description,
-            },
-        })
-    }
 
-    // Debounced autosave (per widget)
-    useEffect(() => {
-        const timeout = setTimeout(() => {
-            saveWidget()
-        }, 500)
-
-        return () => clearTimeout(timeout)
-    }, [title, description])
 
     return (
         <div style={{ marginBottom: 12 }}>
             <input
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={(e) => {
+                    setTitle(e.target.value)
+                    saveWidget({
+                        id: Number(w.id),
+                        title: e.target.value,
+                        description: description,
+                    })
+                }}
             />
 
             <input
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={(e) => {
+                    setDescription(e.target.value)
+                    saveWidget({
+                        id: Number(w.id),
+                        title: title,
+                        description: e.target.value,
+                    })
+                }}
             />
 
             <button
