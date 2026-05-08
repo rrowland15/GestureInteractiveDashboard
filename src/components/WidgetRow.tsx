@@ -12,7 +12,7 @@ import type {
     DeleteWidgetVariables,
 } from "../features/widgets/types"
 
-import { useUpdateWidget } from "../features/widgets/hooks"
+import { useDeleteWidget, useUpdateWidget } from "../features/widgets/hooks"
 
 type Props = {
     w: Widget
@@ -23,34 +23,7 @@ export function WidgetRow({ w }: Props) {
     const [title, setTitle] = useState(w.title)
     const [description, setDescription] = useState(w.description ?? "")
     const { saveWidget } = useUpdateWidget()
-
-    const [deleteWidget] = useMutation<
-        DeleteWidgetResponse,
-        DeleteWidgetVariables
-    >(DELETE_WIDGET, {
-        update(cache, { data }) {
-            if (!data) return
-
-            cache.modify({
-                fields: {
-                    widgets(existingRefs = [], { readField }) {
-                        return existingRefs.filter(
-                            (ref: any) =>
-                                readField("id", ref) !== data.deleteWidget.id
-                        )
-                    },
-                },
-            })
-        }
-    })
-
-    /* ---------------- UPDATE ---------------- */
-
-    const [updateWidget] = useMutation<
-        UpdateWidgetResponse
-    >(UPDATE_WIDGET)
-
-
+    const { deleteWidget } = useDeleteWidget()
 
 
     return (

@@ -1,9 +1,9 @@
 import { useMutation } from "@apollo/client/react"
 import { useEffect, useRef } from "react"
 
-import { UPDATE_WIDGET, } from "./mutations"
+import { UPDATE_WIDGET, DELETE_WIDGET } from "./mutations"
 
-import type { UpdateWidgetResponse, } from "./types"
+import type { UpdateWidgetResponse, DeleteWidgetResponse, DeleteWidgetVariables } from "./types"
 
 type Params = {
     id: number
@@ -38,3 +38,25 @@ export function useUpdateWidget() {
     return { saveWidget }
 }
 
+export function useDeleteWidget() {
+    const [deleteWidget] = useMutation<
+        DeleteWidgetResponse,
+        DeleteWidgetVariables
+    >(DELETE_WIDGET, {
+        update(cache, { data }) {
+            if (!data) return
+
+            cache.modify({
+                fields: {
+                    widgets(existingRefs = [], { readField }) {
+                        return existingRefs.filter(
+                            (ref: any) =>
+                                readField("id", ref) !== data.deleteWidget.id
+                        )
+                    },
+                },
+            })
+        }
+    })
+    return { deleteWidget }
+}
