@@ -1,26 +1,21 @@
 import { useMutation } from "@apollo/client/react"
-import { useEffect, useRef } from "react"
+import { useRef } from "react"
 
-import { UPDATE_WIDGET, DELETE_WIDGET, CREATE_WIDGET } from "../graphql/mutations"
+import { UPDATE_WIDGET } from "../graphql/mutations"
 
-import type { UpdateWidgetResponse, DeleteWidgetResponse, DeleteWidgetVariables, CreateWidgetResponse, CreateWidgetVariables } from "../types/widget.types"
+// import type { UpdateWidgetResponse} from "../types/widget.types"
+import type { UpdateWidgetMutationVariables, UpdateWidgetMutation } from "../../../generated/graphql"
 
-
-type Params = {
-    id: number
-    title: string
-    description: string
-}
 
 export function useUpdateWidget() {
     const [updateWidget] =
-        useMutation<UpdateWidgetResponse>(
+        useMutation<UpdateWidgetMutation, UpdateWidgetMutationVariables>(
             UPDATE_WIDGET
         )
 
     const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-    const saveWidget = ({ id, title, description }: Params) => {
+    const saveWidget = ({ id, title, description }: UpdateWidgetMutationVariables) => {
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current)
         }
@@ -34,10 +29,9 @@ export function useUpdateWidget() {
                 },
                 optimisticResponse: {
                     updateWidget: {
-                        __typename: "Widget",
-                        id,
-                        title,
-                        description,
+                        id: id.toString(),
+                        title: title ?? "",
+                        description: description ?? "",
                     },
                 },
             })

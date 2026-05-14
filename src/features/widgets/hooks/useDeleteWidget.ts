@@ -1,20 +1,19 @@
 import { useMutation } from "@apollo/client/react"
-import { useEffect, useRef } from "react"
 
-import { UPDATE_WIDGET, DELETE_WIDGET, CREATE_WIDGET } from "../graphql/mutations"
+import { DELETE_WIDGET } from "../graphql/mutations"
 
-import type { UpdateWidgetResponse, DeleteWidgetResponse, DeleteWidgetVariables, CreateWidgetResponse, CreateWidgetVariables } from "../types/widget.types"
-
+// import type { DeleteWidgetResponse, DeleteWidgetVariables} from "../types/widget.types"
+import type { DeleteWidgetMutationVariables, DeleteWidgetMutation } from "../../../generated/graphql"
 
 export function useDeleteWidget() {
     const [deleteWidget] = useMutation<
-        DeleteWidgetResponse,
-        DeleteWidgetVariables
+        DeleteWidgetMutation,
+        DeleteWidgetMutationVariables
     >(DELETE_WIDGET, {
         optimisticResponse: (vars) => ({
             deleteWidget: {
                 __typename: "Widget",
-                id: vars.id,
+                id: vars.id.toString()
             },
         }),
 

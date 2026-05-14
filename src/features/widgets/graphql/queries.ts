@@ -1,11 +1,12 @@
 import { gql } from "@apollo/client"
+import { WIDGET_FIELDS } from "./fragments"
 
 export const GET_WIDGETS = gql`
-  query {
+  query GetWidgets {
     widgets {
-      id
-      title
-      description
+      ...WidgetFields
     }
   }
+
+  ${WIDGET_FIELDS}
 `

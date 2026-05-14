@@ -1,7 +1,7 @@
 import { useState } from "react"
 import type {
     Widget,
-} from "../../../features/widgets"
+} from "../../../generated/graphql"
 
 import { useDeleteWidget, useUpdateWidget } from "../../../features/widgets"
 

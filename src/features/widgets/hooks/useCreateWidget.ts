@@ -1,22 +1,26 @@
 import { useMutation } from "@apollo/client/react"
-import { useEffect, useRef } from "react"
 
-import { UPDATE_WIDGET, DELETE_WIDGET, CREATE_WIDGET } from "../graphql/mutations"
 
-import type { UpdateWidgetResponse, DeleteWidgetResponse, DeleteWidgetVariables, CreateWidgetResponse, CreateWidgetVariables } from "../types/widget.types"
+import { CREATE_WIDGET } from "../graphql/mutations"
+
+// import type {CreateWidgetResponse, CreateWidgetVariables } from "../types/widget.types"
+import type {
+    CreateWidgetMutation,
+    CreateWidgetMutationVariables
+} from "../../../generated/graphql"
 
 
 export function useCreateWidget() {
     const [mutate] = useMutation<
-        CreateWidgetResponse,
-        CreateWidgetVariables
+        CreateWidgetMutation,
+        CreateWidgetMutationVariables
     >(CREATE_WIDGET, {
         optimisticResponse: (vars) => ({
             createWidget: {
                 __typename: "Widget",
-                id: -1,
+                id: "optimistic-id",
                 title: vars.title,
-                description: vars.description,
+                description: vars.description ?? ""
             },
         }),
 

@@ -8,10 +8,15 @@ const config: CodegenConfig = {
       plugins: [
         "typescript",
         "typescript-operations",
-        "typescript-react-apollo"
+        "typed-document-node",
       ],
+      config: {
+        skipTypename: false,
+      },
     },
   },
+
+  ignoreNoDocuments: true,
 }
 
 export default config
