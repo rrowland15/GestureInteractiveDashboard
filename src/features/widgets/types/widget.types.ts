@@ -1,4 +1,5 @@
 export type Widget = {
+    __typename?: "Widget"
     id: number
     title: string
     description?: string
@@ -29,4 +30,13 @@ export type CreateWidgetResponse = {
 
 export type UpdateWidgetResponse = {
     updateWidget: Widget
+}
+
+export type WidgetStatus = "idle" | "loading" | "error" | "success"
+
+export type WidgetCardProps = {
+    title: string
+    description?: string
+    status?: WidgetStatus
+    onClick?: () => void
 }

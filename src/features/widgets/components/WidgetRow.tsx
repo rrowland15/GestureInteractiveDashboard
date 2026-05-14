@@ -1,18 +1,9 @@
-import { useState, useEffect } from "react"
-import { useMutation } from "@apollo/client/react"
-
-import {
-    UPDATE_WIDGET, DELETE_WIDGET,
-} from "../features/widgets/mutations"
-
+import { useState } from "react"
 import type {
     Widget,
-    UpdateWidgetResponse,
-    DeleteWidgetResponse,
-    DeleteWidgetVariables,
-} from "../features/widgets/types"
+} from "../../../features/widgets"
 
-import { useDeleteWidget, useUpdateWidget } from "../features/widgets/hooks"
+import { useDeleteWidget, useUpdateWidget } from "../../../features/widgets"
 
 type Props = {
     w: Widget
@@ -56,6 +47,7 @@ export function WidgetRow({ w }: Props) {
                 onClick={() =>
                     deleteWidget({
                         variables: { id: Number(w.id), },
+
                     })
                 }
             >

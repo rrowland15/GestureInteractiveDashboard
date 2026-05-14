@@ -1,6 +1,7 @@
-import { WidgetCard } from "../components/WidgetCard"
+//import { WidgetCard } from "../features/widgets/components/WidgetCard"
 import { useQuery } from "@apollo/client/react"
-import { GET_WIDGETS } from "../features/widgets/queries"
+//import { GET_WIDGETS } from "../features/widgets/graphql/queries"
+import { WidgetCard, GET_WIDGETS } from "../features/widgets"
 
 type Widget = {
     id: string

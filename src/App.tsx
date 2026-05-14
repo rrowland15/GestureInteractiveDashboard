@@ -1,9 +1,9 @@
 import { useQuery } from "@apollo/client/react"
-import { WidgetForm } from "./components/WidgetForm"
-import { WidgetRow } from "./components/WidgetRow"
+import { WidgetForm } from "./features/widgets/components/WidgetForm"
+import { WidgetRow } from "./features/widgets/components/WidgetRow"
 
-import { GET_WIDGETS } from "./features/widgets/queries"
-import type { GetWidgetsData, } from "./features/widgets/types"
+import { GET_WIDGETS } from "./features/widgets/graphql/queries"
+import type { GetWidgetsData, } from "./features/widgets/types/widget.types"
 
 
 /* ---------------- App ---------------- */

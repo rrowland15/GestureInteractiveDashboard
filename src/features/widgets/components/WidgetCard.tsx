@@ -1,4 +1,4 @@
-import { WidgetStatus, WidgetCardProps } from "./types"
+import { WidgetStatus, WidgetCardProps } from "../../../features/widgets"
 
 function renderStatus(status: WidgetStatus) {
     switch (status) {
@@ -17,6 +17,7 @@ function renderStatus(status: WidgetStatus) {
 }
 
 export function WidgetCard({
+
     title,
     description,
     status = "idle",
@@ -48,6 +49,8 @@ export function WidgetCard({
                     <p style={{ margin: 0, color: "#aaa" }}>No description</p>
                 )}
             </div>
+
+
         </div>
     )
 }

@@ -1,6 +1,6 @@
 
 import { useState } from "react"
-import { useCreateWidget } from "../features/widgets/hooks"
+import { useCreateWidget } from "../../../features/widgets"
 
 export function WidgetForm() {
     const [title, setTitle] = useState("")
