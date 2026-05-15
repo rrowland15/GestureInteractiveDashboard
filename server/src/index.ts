@@ -9,6 +9,7 @@ const typeDefs = `#graphql
     id: ID!
     title: String!
     description: String
+    order: Int!
   }
 
   type Query {
@@ -17,26 +18,48 @@ const typeDefs = `#graphql
 
   type Mutation {
     createWidget(title: String!, description: String): Widget!
-  }
-
-  type Mutation {
-  deleteWidget(id: Int!): Widget!
-}
-
-type Mutation {
-  updateWidget(id: Int!, title: String, description: String): Widget!
+    deleteWidget(id: Int!): Widget!
+    updateWidget(id: Int!, title: String, description: String, order: Int): Widget!
+    reorderWidgets(ids: [ID!]!): [Widget!]!
 }
 `
 
 const resolvers = {
   Query: {
-    widgets: () => prisma.widget.findMany(),
+    widgets: () =>
+      prisma.widget.findMany({
+        orderBy: {
+          order: "asc",
+        },
+      }),
   },
 
   Mutation: {
-    createWidget: (_: any, args: any) => {
+    reorderWidgets: async (_: any, args: { ids: string[] }) => {
+      const updates = args.ids.map((id, index) =>
+        prisma.widget.update({
+          where: { id: Number(id) },
+          data: { order: index },
+        })
+      )
+
+      const updated = await Promise.all(updates)
+
+      return updated
+    },
+
+    createWidget: async (_: any, args: any) => {
+      const maxOrder = await prisma.widget.aggregate({
+        _max: {
+          order: true,
+        },
+      })
       return prisma.widget.create({
-        data: args,
+        data: {
+          title: args.title,
+          description: args.description,
+          order: (maxOrder._max.order ?? 0) + 1,
+        },
       })
     },
 
@@ -46,6 +69,7 @@ const resolvers = {
         data: {
           title: args.title,
           description: args.description,
+          order: args.order,
         },
       })
     },

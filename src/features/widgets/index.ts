@@ -5,6 +5,7 @@ export * from "./components/WidgetCard"
 export * from "./hooks/useCreateWidget"
 export * from "./hooks/useDeleteWidget"
 export * from "./hooks/useUpdateWidget"
+export * from "./hooks/useReorderWidgets"
 
 // export * from "./types/widget.types"
 export * from "./graphql/mutations"

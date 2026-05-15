@@ -15,7 +15,7 @@ export function useUpdateWidget() {
 
     const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-    const saveWidget = ({ id, title, description }: UpdateWidgetMutationVariables) => {
+    const saveWidget = ({ id, title, description, order }: UpdateWidgetMutationVariables) => {
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current)
         }
@@ -26,12 +26,14 @@ export function useUpdateWidget() {
                     id,
                     title,
                     description,
+                    order
                 },
                 optimisticResponse: {
                     updateWidget: {
                         id: id.toString(),
                         title: title ?? "",
                         description: description ?? "",
+                        order: 0
                     },
                 },
             })

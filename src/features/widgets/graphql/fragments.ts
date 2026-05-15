@@ -5,5 +5,6 @@ export const WIDGET_FIELDS = gql`
     id
     title
     description
+    order
   }
 `

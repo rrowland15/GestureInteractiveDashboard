@@ -20,7 +20,8 @@ export function useCreateWidget() {
                 __typename: "Widget",
                 id: "optimistic-id",
                 title: vars.title,
-                description: vars.description ?? ""
+                description: vars.description ?? "",
+                order: 0
             },
         }),
 

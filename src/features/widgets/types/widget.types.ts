@@ -39,4 +39,4 @@ export type WidgetStatus = "idle" | "loading" | "error" | "success"
 //     description?: string
 //     status?: WidgetStatus
 //     onClick?: () => void
-// }
+// 
