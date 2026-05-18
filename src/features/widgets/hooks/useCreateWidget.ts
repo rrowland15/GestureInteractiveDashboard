@@ -3,7 +3,7 @@ import { useMutation } from "@apollo/client/react"
 
 import { CREATE_WIDGET } from "../graphql/mutations"
 
-// import type {CreateWidgetResponse, CreateWidgetVariables } from "../types/widget.types"
+
 import type {
     CreateWidgetMutation,
     CreateWidgetMutationVariables
@@ -43,10 +43,13 @@ export function useCreateWidget() {
 
     })
 
-    const createWidget = async (
-        title: string,
-        description: string
-    ) => {
+    const createWidget = async ({
+        title,
+        description,
+    }: {
+        title: string
+        description?: string
+    }) => {
         return mutate({
             variables: {
                 title,

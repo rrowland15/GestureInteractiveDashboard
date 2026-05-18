@@ -1,8 +1,8 @@
 import { useQuery } from "@apollo/client/react"
 import { WidgetCard, GET_WIDGETS } from "../features/widgets"
-import type { GetWidgetsQueryVariables, GetWidgetsQuery, UpdateWidgetMutationVariables } from "../generated/graphql"
-import { useState, useEffect } from "react"
-import { useDeleteWidget, useUpdateWidget, useReorderWidgets } from "../features/widgets"
+import type { GetWidgetsQueryVariables, GetWidgetsQuery, UpdateWidgetMutationVariables, Widget } from "../generated/graphql"
+import { useState, useEffect, useRef } from "react"
+import { useDeleteWidget, useUpdateWidget, useReorderWidgets, useCreateWidget } from "../features/widgets"
 import {
     DndContext,
     closestCenter,
@@ -14,6 +14,8 @@ import {
     verticalListSortingStrategy,
 } from "@dnd-kit/sortable"
 import { SortableWidgetRow } from "../features/widgets/components/SortableWidgetRow"
+import { WidgetForm } from "../features/widgets/components/WidgetForm"
+
 
 export function DashboardPage() {
 
@@ -23,14 +25,40 @@ export function DashboardPage() {
     const { saveWidget } = useUpdateWidget()
     const { deleteWidget } = useDeleteWidget()
     const { reorderWidgets } = useReorderWidgets()
+    const { createWidget } = useCreateWidget()
+    // const isDraggingRef = useRef(false)
 
     const handleDelete = (id: string) => {
         deleteWidget({
             variables: { id: Number(id) },
         })
+
+        setItems(items =>
+            items.filter(item => item.id !== id)
+        )
     }
 
-    const [items, setItems] = useState<any[]>([])
+    const [items, setItems] = useState<Widget[]>([])
+
+    const handleCreate = async (
+        title: string,
+        description: string
+    ) => {
+
+        const result = await createWidget({
+            title,
+            description,
+        })
+
+        const newWidget = result.data?.createWidget
+
+        if (newWidget) {
+            setItems(items => [
+                ...items,
+                newWidget
+            ])
+        }
+    }
 
     const handleUpdate = (
         updatedWidget: UpdateWidgetMutationVariables
@@ -61,7 +89,9 @@ export function DashboardPage() {
         }
     }, [data?.widgets])
 
+
     function handleDragEnd(event: any) {
+        // isDraggingRef.current = false
         const { active, over } = event
 
         if (!over || active.id === over.id) return
@@ -85,7 +115,6 @@ export function DashboardPage() {
     if (loading) return <p>Loading dashboard...</p>
     if (error || !data) return <p>Failed to load dashboard</p>
 
-    console.log("items render order:", items.map(i => i.id))
 
     return (
 
@@ -93,8 +122,12 @@ export function DashboardPage() {
         <div style={{ padding: "20px" }}>
             <h1>Dashboard</h1>
 
+
+            <WidgetForm onCreate={handleCreate}></WidgetForm>
+
             <DndContext
                 collisionDetection={closestCenter}
+                // onDragStart={handleDragStart}
                 onDragEnd={handleDragEnd}
             >
                 <SortableContext
@@ -112,6 +145,9 @@ export function DashboardPage() {
                 </SortableContext>
             </DndContext>
 
+
         </div >
+
+
     )
 }

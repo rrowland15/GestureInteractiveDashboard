@@ -2,21 +2,36 @@
 import { useState } from "react"
 import { useCreateWidget } from "../../../features/widgets"
 
-export function WidgetForm() {
+type Props = {
+    onCreate: (
+        title: string,
+        description: string
+    ) => Promise<void>
+}
+export function WidgetForm({ onCreate }: Props) {
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
     const { createWidget } = useCreateWidget()
 
+    const handleSubmit = async (
+        e: React.SubmitEvent
+    ) => {
+        e.preventDefault()
+
+        await onCreate(
+            title,
+            description
+        )
+
+        setTitle("")
+        setDescription("")
+    }
+
     return (
 
-        <form
-            onSubmit={async (e) => {
-                e.preventDefault()
-                await createWidget(title, description)
-                setTitle("")
-                setDescription("")
-            }}
-        >
+        <form className="widgetForm"
+            onSubmit={handleSubmit}>
+
             <input
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}

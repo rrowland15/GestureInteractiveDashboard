@@ -2,6 +2,7 @@ import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import { Widget } from "../../../generated/graphql"
 import { useState, useEffect } from "react"
+import "../../../App.css"
 
 
 type Props = {
@@ -30,9 +31,9 @@ export function SortableWidgetRow({ widget, onDelete, onUpdate }: Props) {
     }
 
     return (
-        <div ref={setNodeRef} style={style} {...attributes}>
+        <div ref={setNodeRef} className="widgetRow" style={style} {...attributes}>
             { }
-            <button {...listeners} style={{ cursor: "grab", marginRight: 8 }}>
+            <button {...listeners} className="dragHandle" style={{ cursor: "grab", marginRight: 8 }}>
                 ☰
             </button>
             <input
